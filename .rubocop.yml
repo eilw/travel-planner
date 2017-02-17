@@ -1,0 +1,65 @@
+Documentation:
+  Enabled: false
+
+Style/WordArray:
+  Enabled: false
+
+StringLiterals:
+  Enabled: false
+
+Style/ClassAndModuleChildren:
+  Enabled: false
+
+Metrics/LineLength:
+  Max: 120
+  Enabled: true
+
+Metrics/BlockLength:
+  Exclude:
+    - 'rails/spec/**/*'
+
+Style/DotPosition:
+  Enabled: false
+
+Style/Lambda:
+  Enabled: false
+
+Style/FrozenStringLiteralComment:
+  Enabled: false
+
+Style/MethodDefParentheses:
+  Enabled: true
+
+Style/MethodCallWithoutArgsParentheses:
+  Enabled: true
+
+Style/StructInheritance:
+  Enabled: false
+
+Style/AsciiComments:
+  Enabled: false
+
+Style/RegexpLiteral:
+  Enabled: false
+
+Metrics/MethodLength:
+  Max: 15
+  CountComments: false
+  Enabled: true
+
+AllCops:
+  TargetRubyVersion: 2.3
+  Exclude:
+    - 'config/**/*'
+    - 'script/**/*'
+    - 'db/schema.rb'
+    - 'app/views/**/*'
+    - 'rails/db/schema.rb'
+    - 'rails/config/**/*'
+    - 'rails/script/**/*'
+    - 'rails/db/schema.rb'
+    - 'rails/app/views/**/*'
+    - 'Gemfile'
+    - 'log/**/*'
+
+  TargetRubyVersion: 2.3
