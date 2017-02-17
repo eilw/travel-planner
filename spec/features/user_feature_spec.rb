@@ -27,14 +27,8 @@ end
 def sign_up(name: 'Name', email: 'test@example.com', password: 'testtest')
   visit('/')
   click_link('Sign up')
-  fill_in('user_name', with: name)
+  fill_in('user_username', with: name)
   fill_in('user_email', with: email)
   fill_in('user_password', with: password)
-  click_button('Submit')
-end
-
-def login_approved_user_factory_girl
-  user = FactoryGirl.create(:user, :approved)
-  login_as(user, scope: :user)
-  visit('/')
+  click_button('Sign up')
 end
