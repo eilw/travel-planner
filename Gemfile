@@ -40,6 +40,12 @@ gem 'haml-rails'
 gem 'devise'
 gem 'bootstrap-sass'
 
+group :test do
+  gem 'selenium-webdriver'
+  gem 'poltergeist'
+  gem 'database_cleaner'
+end
+
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug', platform: :mri
@@ -47,6 +53,7 @@ group :development, :test do
   gem 'capybara'
   gem 'rspec-rails'
   gem 'pry'
+  gem 'haml-lint'
 end
 
 group :development do
