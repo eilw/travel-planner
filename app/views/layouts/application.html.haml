@@ -1,0 +1,30 @@
+!!!
+%html
+  %head
+    %meta{:content => "text/html; charset=UTF-8", "http-equiv" => "Content-Type"}/
+    %title TravelPlanner
+    = csrf_meta_tags
+    = stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload'
+    = javascript_include_tag 'application', 'data-turbolinks-track': 'reload'
+  %body
+    %nav.navbar.navbar-default.navbar-fixed-top
+      .container
+        .navbar-header
+          %button.navbar-toggle.collapsed{ 'aria-controls' => 'navbar', 'aria-expanded' => 'false', 'data-target' => '#navbar', 'data-toggle' => 'collapse', :type => 'button' }
+            %span.sr-only Toggle navigation
+            %span.icon-bar
+            %span.icon-bar
+            %span.icon-bar
+        .navbar-collapse.collapse#navbar
+          %ul.nav.navbar-nav.navbar-right
+            %li= link_to 'Home', root_path
+            - if user_signed_in?
+              %li= link_to 'Sign out', destroy_user_session_path, method: :delete
+            - else
+              %li= link_to 'Log in', new_user_session_path
+              %li= link_to 'Sign up', new_user_registration_path
+  .container
+    %p.notice= notice
+    %p.alert= alert
+    = yield
+

@@ -15,7 +15,7 @@ feature "User can sign in and out" do
   end
 
   context 'user logged in on the homepage' do
-    scenario "should see 'Salir' link" do
+    scenario "should see 'Sign out' link" do
       sign_up
       expect(page).to have_link('Sign out')
       expect(page).not_to have_link('Sign up')
@@ -38,4 +38,3 @@ def login_approved_user_factory_girl
   login_as(user, scope: :user)
   visit('/')
 end
-
