@@ -1,11 +1,11 @@
 require 'rails_helper'
 
 describe User do
-  let(:user_attributes) { FactoryGirl.attributes_for(:user) }
+  let(:user_attributes) { attributes_for(:user) }
 
   describe 'validations' do
     it 'factory girl is valid' do
-      user = FactoryGirl.create(:user)
+      user = create(:user)
       expect(user).to be_valid
     end
 

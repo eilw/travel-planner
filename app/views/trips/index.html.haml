@@ -1,0 +1,5 @@
+%h2 My trips
+- @trips.each do |trip|
+  %p
+    = link_to trip.name.to_s + ":", trip_path(trip)
+    = trip.description.to_s

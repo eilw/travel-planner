@@ -1,7 +1,7 @@
 require 'rails_helper'
 
-feature "User can sign in and out" do
-  context "user not logged in and on the homepage" do
+feature 'User can sign in and out' do
+  context 'user not logged in and on the homepage' do
     scenario "should see a 'login' link and a 'sign up' link" do
       visit('/')
       expect(page).to have_link('Log in')
