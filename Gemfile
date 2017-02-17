@@ -39,6 +39,7 @@ gem 'haml'
 gem 'haml-rails'
 gem 'devise'
 gem 'bootstrap-sass'
+gem 'simple_form'
 
 group :test do
   gem 'selenium-webdriver'

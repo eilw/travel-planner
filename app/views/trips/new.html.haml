@@ -1,0 +1,8 @@
+.row
+  .col-md-4
+  .col-md-4
+    = simple_form_for @trip do |f|
+      = f.input :name
+      = f.input :description
+      .actions
+        = f.submit 'Create trip', class: 'btn btn-primary'
