@@ -10,10 +10,27 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170218171938) do
+ActiveRecord::Schema.define(version: 20170218211649) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "trip_invites", force: :cascade do |t|
+    t.string   "email",      default: "", null: false
+    t.integer  "trip_id"
+    t.datetime "created_at",              null: false
+    t.datetime "updated_at",              null: false
+    t.index ["trip_id"], name: "index_trip_invites_on_trip_id", using: :btree
+  end
+
+  create_table "trip_participants", force: :cascade do |t|
+    t.integer  "trip_id"
+    t.integer  "user_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["trip_id"], name: "index_trip_participants_on_trip_id", using: :btree
+    t.index ["user_id"], name: "index_trip_participants_on_user_id", using: :btree
+  end
 
   create_table "trips", force: :cascade do |t|
     t.string   "name",        null: false

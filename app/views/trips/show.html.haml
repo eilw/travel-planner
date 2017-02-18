@@ -1,5 +1,14 @@
-= link_to 'My trips', trips_path
+.row
+  .col-md-4
+    = link_to 'My trips', trips_path
+  .col-md-4
+    %h2= @trip.name.to_s
+    %p= @trip.description.to_s
+  .col-md-4
+    = link_to 'Invite people', new_trip_invite_path(@trip)
+    %h3 Invitations
+    %ul
+      - @trip.invites.each do |invite|
+        %li= invite.email.to_s
 
-%h2= @trip.name.to_s
 
-%p= @trip.description.to_s
