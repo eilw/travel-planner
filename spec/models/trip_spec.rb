@@ -8,7 +8,7 @@ describe Trip do
     end
 
     it 'a trip is invalid without a name' do
-      trip = Trip.create(creator: create(:user))
+      trip = Trip.create(organiser: create(:user))
       expect(trip).to be_invalid
     end
 

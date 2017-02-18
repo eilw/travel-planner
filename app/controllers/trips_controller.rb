@@ -34,11 +34,11 @@ class TripsController < ApplicationController
   end
 
   def save_trip
-    redirect_to @trip if @trip.save!
+    redirect_to @trip if @trip.save
   end
 
   def trip_scope
-    Trip.where(creator: current_user)
+    Trip.where(organiser: current_user)
   end
 
   def trip_params

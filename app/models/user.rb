@@ -5,5 +5,6 @@ class User < ApplicationRecord
          :recoverable, :rememberable, :trackable, :validatable
 
   validates :username, presence: true
-  has_many :trips
+  has_many :trip_participants
+  has_many :trips, through: :trip_participants
 end
