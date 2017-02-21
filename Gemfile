@@ -1,10 +1,11 @@
 source 'https://rubygems.org'
 
+ruby '2.3.1'
+
 git_source(:github) do |repo_name|
   repo_name = "#{repo_name}/#{repo_name}" unless repo_name.include?("/")
   "https://github.com/#{repo_name}.git"
 end
-
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '~> 5.0.1'
@@ -34,11 +35,11 @@ gem 'jbuilder', '~> 2.5'
 
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development
-
+gem 'active_type'
+gem 'bootstrap-sass'
+gem 'devise'
 gem 'haml'
 gem 'haml-rails'
-gem 'devise'
-gem 'bootstrap-sass'
 gem 'simple_form'
 
 group :test do
@@ -55,6 +56,7 @@ group :development, :test do
   gem 'rspec-rails'
   gem 'pry'
   gem 'haml-lint'
+  gem 'awesome_print'
 end
 
 group :development do
@@ -65,6 +67,7 @@ group :development do
   gem 'spring'
   gem 'spring-watcher-listen', '~> 2.0.0'
   gem 'rubocop', require: false
+  gem 'better_errors'
 end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem

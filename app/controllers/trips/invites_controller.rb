@@ -1,23 +1,28 @@
 class Trips::InvitesController < ApplicationController
   before_action :authenticate_user!
   def new
-    build_invite
+    build_invite_builder
   end
 
   def create
-    build_invite
-    save_invite || render(:new)
+    build_invite_builder
+
+    if @invite_builder.save
+      redirect_to new_trip_invite_path
+    else
+      render(:new)
+    end
   end
 
   private
 
-  def build_invite
-    @invite ||= invite_scope.build
-    @invite.attributes = invite_params
+  def build_invite_builder
+    trip
+    @invite_builder ||= Trip::InviteBuilder.new(invite_params)
   end
 
-  def save_invite
-    redirect_to @trip if @invite.save
+  def build_invite
+    @invite = invite_scope.build
   end
 
   def invite_scope
@@ -29,7 +34,12 @@ class Trips::InvitesController < ApplicationController
   end
 
   def invite_params
-    invite_params = params[:trip_invite]
-    invite_params ? invite_params.permit(:email) : {}
+    invite_params = params[:trip_invite_builder]
+    if invite_params
+      invite_params[:trip_id] = params[:trip_id]
+      invite_params.permit(:emails, :message, :trip_id)
+    else
+      {}
+    end
   end
 end
