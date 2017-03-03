@@ -40,4 +40,17 @@ describe Trip::Invite do
       expect(valid_invite).to be_valid
     end
   end
+
+  describe 'after create' do
+    it 'calls the Tripmailer with self and the trip' do
+      trip = create(:trip)
+
+      expect(TripMailer).to receive(:send_new_invitation).with(an_instance_of(trip_invite), trip).and_call_original
+      create(:trip_invite, trip: trip)
+    end
+
+    it 'sends an email' do
+      expect { create(:trip_invite) }.to change { ActionMailer::Base.deliveries.count }.by(1)
+    end
+  end
 end
