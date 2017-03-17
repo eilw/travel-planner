@@ -53,4 +53,17 @@ describe Trip::Invite do
       expect { create(:trip_invite) }.to change { ActionMailer::Base.deliveries.count }.by(1)
     end
   end
+
+  describe '#responded?' do
+    let(:invite) { create(:trip_invite) }
+
+    it 'returns true if rvsp has been responded' do
+      invite.update!(rvsp: true)
+      expect(invite).to be_responded
+    end
+
+    it 'returns false if rvsp not given' do
+      expect(invite).not_to be_responded
+    end
+  end
 end
