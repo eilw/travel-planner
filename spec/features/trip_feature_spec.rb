@@ -50,6 +50,23 @@ feature 'Trip' do
     click_link('Back to trip')
     expect(page).to have_content('Trip invites: 1 invitations')
   end
+
+  scenario 'The status of the invited users to the trip is shown' do
+    login_user
+    create_trip(name: 'A trip', description: 'Our trip to Italy')
+    click_link('Trip invites')
+    fill_in('trip_invite_builder_emails', with: 'invite@email.com, invite2@email.com, invite3@email.com')
+    fill_in('trip_invite_builder_message', with: 'Trip invite message')
+    click_button('Send invitations')
+
+    Trip::Invite.find_by(email: 'invite@email.com').update!(rvsp: true)
+    Trip::Invite.find_by(email: 'invite2@email.com').update!(rvsp: false)
+    visit current_path
+
+    expect(page).to have_content('Accepted')
+    expect(page).to have_content('Declined')
+    expect(page).to have_content('Pending')
+  end
 end
 
 def create_trip(name:, description:)

@@ -12,4 +12,4 @@
     %ul
       - @trip.invites.each do |invite|
         - if invite.valid?
-          %li= invite.email
+          %li= invite.email + " Status: #{rvsp_state(invite)}"

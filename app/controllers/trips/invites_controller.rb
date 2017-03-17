@@ -1,5 +1,5 @@
 class Trips::InvitesController < ApplicationController
-  before_action :authenticate_user!
+  before_action :authenticate_user!, except: :rvsp
   def new
     build_invite_builder
   end
@@ -11,6 +11,16 @@ class Trips::InvitesController < ApplicationController
       redirect_to new_trip_invite_path
     else
       render(:new)
+    end
+  end
+
+  def rvsp
+    invite = Trip::Invite.find_by(token: params[:token])
+    if invite.update!(rvsp: params[:rvsp]) && invite.rvsp
+      flash[:notice] = 'Thanks for your response'
+      redirect_to(trip_path(invite.trip))
+    else
+      redirect_to root_path
     end
   end
 
