@@ -67,6 +67,17 @@ feature 'Trip' do
     expect(page).to have_content('Declined')
     expect(page).to have_content('Pending')
   end
+
+  scenario 'An existing user is added to participants if accepts invite' do
+    organiser = create(:user)
+    invitee = create(:user)
+    trip = create(:trip, organiser: organiser)
+    trip_invite = create(:trip_invite, trip: trip, email: invitee.email)
+    trip_invite.update!(rvsp: true)
+    login_user(invitee)
+    click_link('My trips')
+    expect(page).to have_content('My description')
+  end
 end
 
 def create_trip(name:, description:)

@@ -24,6 +24,18 @@ feature 'User can sign in and out' do
   end
 end
 
+feature 'Add invitations when signup' do
+  context 'Accepted invite' do
+    scenario 'A user can see trips accepted when joining' do
+      create(:trip_invite, email: 'invite@email.com', rvsp: true, responded_at: Time.zone.now)
+      sign_up(email: 'invite@email.com')
+      click_link('My trips')
+      expect(page).to have_content('My trip')
+      expect(page).to have_content('My description')
+    end
+  end
+end
+
 def sign_up(name: 'Name', email: 'test@example.com', password: 'testtest')
   visit('/')
   click_link('Sign up')

@@ -31,6 +31,7 @@ class TripsController < ApplicationController
   def build_trip
     @trip ||= trip_scope.build
     @trip.attributes = trip_params
+    @trip.organiser = current_user
   end
 
   def save_trip
@@ -38,7 +39,7 @@ class TripsController < ApplicationController
   end
 
   def trip_scope
-    Trip.where(organiser: current_user)
+    current_user.trips
   end
 
   def trip_params

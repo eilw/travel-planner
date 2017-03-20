@@ -4,4 +4,11 @@ class Trip < ApplicationRecord
   has_many :trip_participants
   has_many :participants, through: :trip_participants, source: :user
   has_many :invites
+  after_create :organiser_is_a_participant
+
+  private
+
+  def organiser_is_a_participant
+    participants << organiser
+  end
 end

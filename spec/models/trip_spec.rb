@@ -1,6 +1,8 @@
 require 'rails_helper'
 
 describe Trip do
+  let(:trip) { create(:trip) }
+
   describe 'validations' do
     it 'factory girl is valid' do
       trip = create(:trip)
@@ -15,6 +17,12 @@ describe Trip do
     it 'a trip is invalid without a creator' do
       trip = Trip.create(name: 'bla')
       expect(trip).to be_invalid
+    end
+  end
+
+  describe 'participants' do
+    it 'an organiser is automatically a participant' do
+      expect(trip.participants).to include(trip.organiser)
     end
   end
 end
