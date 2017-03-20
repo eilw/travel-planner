@@ -2,6 +2,7 @@ require 'rails_helper'
 
 describe Trip::Invite do
   let(:trip_invite) { described_class }
+  let(:invite) { create(:trip_invite) }
 
   describe 'validations' do
     it 'factory girl is valid' do
@@ -51,6 +52,18 @@ describe Trip::Invite do
 
     it 'sends an email' do
       expect { create(:trip_invite) }.to change { ActionMailer::Base.deliveries.count }.by(1)
+    end
+  end
+
+  describe 'rvsp' do
+    it 'if rvsp set to true, makes call to TripInviteManager to add user' do
+      expect(Trip::InviteManager).to receive(:invite_accepted)
+      invite.update!(rvsp: true)
+    end
+
+    it 'if rvsp is set to false, does not make call TripInviteManager' do
+      expect(Trip::InviteManager).to receive(:invite_accepted).never
+      invite.update!(rvsp: false)
     end
   end
 

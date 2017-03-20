@@ -11,6 +11,7 @@ class Trip::Invite < ApplicationRecord
   validates :email, format: /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\Z/i, on: :create
 
   after_update :update_responded_at, if: :rvsp_changed?
+  after_update :invite_accepted, if: :rvsp_changed?
   after_create :send_invite
 
   def responded?
@@ -18,6 +19,10 @@ class Trip::Invite < ApplicationRecord
   end
 
   private
+
+  def invite_accepted
+    Trip::InviteManager.invite_accepted(invite: self, email: email) if rvsp
+  end
 
   def update_responded_at
     touch :responded_at
