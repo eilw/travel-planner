@@ -1,0 +1,11 @@
+class CreateTripDestinations < ActiveRecord::Migration[5.0]
+  def change
+    create_table :trip_destinations do |t|
+      t.string :name, null: false
+      t.string :description
+      t.belongs_to :trip, index: true
+
+      t.timestamps
+    end
+  end
+end

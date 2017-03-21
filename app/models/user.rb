@@ -5,7 +5,7 @@ class User < ApplicationRecord
          :recoverable, :rememberable, :trackable, :validatable
 
   validates :username, presence: true
-  has_many :trip_participants
+  has_many :trip_participants, dependent: :destroy
   has_many :trips, through: :trip_participants
   after_create :add_trips
 
