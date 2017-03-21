@@ -3,7 +3,8 @@ class Trip < ApplicationRecord
   belongs_to :organiser, class_name: "User", foreign_key: "user_id"
   has_many :trip_participants
   has_many :participants, through: :trip_participants, source: :user
-  has_many :invites
+  has_many :invites, dependent: :destroy
+  has_many :destinations, dependent: :destroy
   after_create :organiser_is_a_participant
 
   private

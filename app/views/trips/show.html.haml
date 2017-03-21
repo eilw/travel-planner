@@ -3,6 +3,11 @@
   .col-md-4
     %h2= @trip.name.to_s
     %p= @trip.description.to_s
+    %p= link_to "Add destination", new_trip_destination_path(@trip)
   .col-md-4
     = link_to "Trip invites: #{@trip.invites.count} invitations", new_trip_invite_path(@trip)
-
+.row
+  .col-md-4
+  .col-md-4
+    - @trip.destinations.each do |destination|
+      %p= destination.name + ": " + destination.description

@@ -1,5 +1,6 @@
 require 'rails_helper'
 require_relative './helpers/users'
+require_relative './helpers/trip'
 
 feature 'Trip' do
   scenario 'A user can create a new trip' do
@@ -78,11 +79,4 @@ feature 'Trip' do
     click_link('My trips')
     expect(page).to have_content('My description')
   end
-end
-
-def create_trip(name:, description:)
-  click_link('Create a new trip')
-  fill_in('trip_name', with: name)
-  fill_in('trip_description', with: description)
-  click_button('Create trip')
 end
