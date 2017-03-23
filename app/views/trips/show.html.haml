@@ -11,3 +11,6 @@
   .col-md-4
     - @trip.destinations.each do |destination|
       %p= destination.name + ": " + destination.description
+      - destination.comments.each do |comment|
+        %p "#{comment.author.username}: #{comment.text} at #{comment.added_at}"
+      = link_to "Add comment", new_destination_comment_path(destination)

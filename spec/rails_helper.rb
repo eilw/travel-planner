@@ -7,6 +7,7 @@ require 'spec_helper'
 require 'rspec/rails'
 require 'capybara/rails'
 require 'capybara/poltergeist'
+require 'capybara-screenshot/rspec'
 
 require 'support/factory_girl'
 require 'support/controller_macros'
