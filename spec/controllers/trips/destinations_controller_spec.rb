@@ -10,7 +10,7 @@ describe Trips::DestinationsController do
       before { post :create, params: { trip_id: trip.id, trip_destination: { name: 'Sarajevo' } } }
 
       it 'adds a destination to the trip' do
-        expect(trip.reload.destinations.count).to eq(1)
+        expect(trip.destinations.count).to eq(1)
       end
 
       it 'redirects to trip path' do

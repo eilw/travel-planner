@@ -5,8 +5,9 @@ class User < ApplicationRecord
          :recoverable, :rememberable, :trackable, :validatable
 
   validates :username, presence: true
-  has_many :trip_participants, dependent: :destroy
+  has_many :trip_participants, dependent: :delete_all
   has_many :trips, through: :trip_participants
+  has_many :comments, dependent: :delete_all
   after_create :add_trips
 
   private
