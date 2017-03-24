@@ -5,10 +5,12 @@ Rails.application.routes.draw do
   resource :home, only: [:index]
   resources :trips, only: [:new, :create, :show, :index], shallow: true do
     resources :destinations, only: [:new, :create], controller: "trips/destinations", shallow: true do
+      post :vote_for, on: :member, controller: "alternatives/votes"
+      post :vote_against, on: :member, controller: "alternatives/votes"
       resources :comments, only: [:new, :create], controller: "alternatives/comments"
     end
 
-    resources :invites, only: [:new, :create ], controller: "trips/invites" do
+    resources :invites, only: [:new, :create], controller: "trips/invites" do
       get :rvsp, on: :member
     end
   end

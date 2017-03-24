@@ -11,6 +11,10 @@
   .col-md-4
     - @trip.destinations.each do |destination|
       %p= destination.name + ": " + destination.description
+      %div{ id: "vote_score_destination_#{destination.id}" }
+        = render partial: "destination_votes_count", locals: { destination: destination }
+      = button_to("Like", vote_for_destination_path(destination), remote: true, method: :post)
+      = button_to("Nope", vote_against_destination_path(destination), remote: true, method: :post)
       - destination.comments.each do |comment|
         %p "#{comment.author.username}: #{comment.text} at #{comment.added_at}"
       = link_to "Add comment", new_destination_comment_path(destination)
