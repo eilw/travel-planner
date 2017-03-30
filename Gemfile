@@ -36,11 +36,11 @@ gem 'jbuilder', '~> 2.5'
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development
 gem 'active_type'
-gem 'bootstrap-sass'
 gem 'devise'
 gem 'haml'
 gem 'haml-rails'
 gem 'simple_form'
+gem 'foundation-rails'
 
 group :test do
   gem 'selenium-webdriver'
