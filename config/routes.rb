@@ -9,6 +9,7 @@ Rails.application.routes.draw do
       post :vote_against, on: :member, controller: "alternatives/votes"
       resources :comments, only: [:new, :create], controller: "alternatives/comments"
     end
+    resources :date_options, only: [:new, :create], controller: "trips/date_options"
 
     resources :invites, only: [:new, :create], controller: "trips/invites" do
       get :rvsp, on: :member

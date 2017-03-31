@@ -1,0 +1,6 @@
+.row
+  .small-4.columns.small-centered
+    %h1 Add a new date option to the trip
+    = simple_form_for @date do |f|
+      = f.input :range
+      = f.submit 'Add date', class: 'button'

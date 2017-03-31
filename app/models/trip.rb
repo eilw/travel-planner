@@ -5,6 +5,7 @@ class Trip < ApplicationRecord
   has_many :participants, through: :trip_participants, source: :user
   has_many :invites, dependent: :destroy
   has_many :destinations, dependent: :destroy
+  has_many :date_options, dependent: :destroy
   after_create :organiser_is_a_participant
 
   private
