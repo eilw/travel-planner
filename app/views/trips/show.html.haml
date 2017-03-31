@@ -1,20 +1,24 @@
 .row
-  .col-md-4
-  .col-md-4
+  .small-8.columns
     %h2= @trip.name.to_s
     %p= @trip.description.to_s
-    %p= link_to "Add destination", new_trip_destination_path(@trip)
-  .col-md-4
+    %p= link_to "Add destination", new_trip_destination_path(@trip), class: 'button'
+    %p= link_to "Add date", new_trip_date_option_path(@trip), class: 'button'
+  .small-4.columns
     = link_to "Trip invites: #{@trip.invites.count} invitations", new_trip_invite_path(@trip)
 .row
-  .col-md-4
-  .col-md-4
+  .small-8.columns
+    %p Destinations:
     - @trip.destinations.each do |destination|
       %p= destination.name + ": " + destination.description
       %div{ id: "vote_score_destination_#{destination.id}" }
         = render partial: "destination_votes_count", locals: { destination: destination }
       = button_to("Like", vote_for_destination_path(destination), remote: true, method: :post)
       = button_to("Nope", vote_against_destination_path(destination), remote: true, method: :post)
+      %p Comments:
       - destination.comments.each do |comment|
-        %p "#{comment.author.username}: #{comment.text} at #{comment.added_at}"
+        %p #{comment.author.username}: #{comment.text} at #{comment.added_at}
       = link_to "Add comment", new_destination_comment_path(destination)
+    %p Dates:
+    - @trip.date_options.each do |date|
+      %p= date.range

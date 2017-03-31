@@ -11,7 +11,7 @@ describe Trip::Destination do
     end
 
     it 'a destination without a name is invalid' do
-      invalid_destination = subject.create(description: destination_description)
+      invalid_destination = subject.create(description: destination_description, trip: build(:trip))
       expect(invalid_destination).to be_invalid
     end
   end
