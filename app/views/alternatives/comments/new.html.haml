@@ -1,8 +1,0 @@
-%h1 Add a comment
-.row
-  .col-md-4
-  .col-md-4
-    = simple_form_for @comment, url: destination_comments_path, html: { method: :post } do |f|
-      = f.input :text
-      .actions
-        = f.submit 'Done', class: 'btn btn-primary'

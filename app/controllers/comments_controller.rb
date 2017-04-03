@@ -1,4 +1,4 @@
-class Alternatives::CommentsController < ApplicationController
+class CommentsController < ApplicationController
   before_action :authenticate_user!
 
   def new
@@ -19,15 +19,16 @@ class Alternatives::CommentsController < ApplicationController
   end
 
   def save_comment
-    redirect_to @destination.trip if @comment.save
+    redirect_to @commentable.trip if @comment.save
   end
 
-  def destination
-    @destination ||= Trip::Destination.find(params[:destination_id])
+  def commentable
+    klass = params[:commentable_type].camelize.constantize
+    @commentable ||= klass.find(params[:commentable_id])
   end
 
   def comment_scope
-    destination.comments
+    commentable.comments
   end
 
   def comment_params
