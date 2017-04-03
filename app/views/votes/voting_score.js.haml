@@ -1,0 +1,1 @@
+$("#vote_score_" + "#{@votable.class.name.demodulize.underscore}_" + "#{@votable.id}").html("#{j render(partial: 'trips/votable_votes_count', locals: { votable: @votable })}");

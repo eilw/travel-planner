@@ -1,0 +1,4 @@
+%div{ id: "vote_score_#{id_type}_#{votable.id}" }
+  = render partial: "votable_votes_count", locals: { votable: votable }
+= button_to("Like", votes_path(vote: 'for', votable_id: votable.id, votable_type: votable_type), remote: true, method: :post)
+= button_to("Nope", votes_path(vote: 'against', votable_id: votable.id, votable_type: votable_type), remote: true, method: :post)

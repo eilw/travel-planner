@@ -2,23 +2,22 @@
   .small-8.columns
     %h2= @trip.name.to_s
     %p= @trip.description.to_s
-    %p= link_to "Add destination", new_trip_destination_path(@trip), class: 'button'
-    %p= link_to "Add date", new_trip_date_option_path(@trip), class: 'button'
   .small-4.columns
     = link_to "Trip invites: #{@trip.invites.count} invitations", new_trip_invite_path(@trip)
 .row
   .small-8.columns
-    %p Destinations:
+
+    %h3 Destinations:
+    %p= link_to "Add destination", new_trip_destination_path(@trip), class: 'button'
     - @trip.destinations.each do |destination|
       %p= destination.name + ": " + destination.description
-      %div{ id: "vote_score_destination_#{destination.id}" }
-        = render partial: "destination_votes_count", locals: { destination: destination }
-      = button_to("Like", vote_for_destination_path(destination), remote: true, method: :post)
-      = button_to("Nope", vote_against_destination_path(destination), remote: true, method: :post)
-      %p Comments:
-      - destination.comments.each do |comment|
-        %p #{comment.author.username}: #{comment.text} at #{comment.added_at}
-      = link_to "Add comment", new_destination_comment_path(destination)
-    %p Dates:
+      = render partial: "votes", locals: { votable: destination, votable_type: 'trip/destination', id_type: 'destination' }
+      = render partial: "comments", locals: { commentable: destination, commentable_type: 'trip/destination' }
+
+    %h3 Dates:
+    %p= link_to "Add date", new_trip_date_option_path(@trip), class: 'button'
+
     - @trip.date_options.each do |date|
       %p= date.range
+      = render partial: "votes", locals: { votable: date, votable_type: 'trip/date_option', id_type: 'date_option' }
+      = render partial: "comments", locals: { commentable: date, commentable_type: 'trip/date_option' }
