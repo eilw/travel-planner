@@ -14,7 +14,7 @@ describe Trip do
       expect(trip).to be_invalid
     end
 
-    it 'a trip is invalid without a creator' do
+    it 'a trip is invalid without an organiser' do
       trip = Trip.create(name: 'bla')
       expect(trip).to be_invalid
     end

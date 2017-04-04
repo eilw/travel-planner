@@ -56,6 +56,7 @@ GEM
       rack (>= 0.9.0)
     builder (3.2.3)
     byebug (9.0.6)
+    cancancan (1.15.0)
     capybara (2.12.0)
       addressable
       mime-types (>= 1.16)
@@ -289,6 +290,7 @@ DEPENDENCIES
   awesome_print
   better_errors
   byebug
+  cancancan
   capybara
   capybara-screenshot
   coffee-rails (~> 4.2)

@@ -41,6 +41,7 @@ gem 'haml'
 gem 'haml-rails'
 gem 'simple_form'
 gem 'foundation-rails'
+gem 'cancancan'
 
 group :test do
   gem 'selenium-webdriver'
