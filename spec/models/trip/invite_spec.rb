@@ -3,6 +3,7 @@ require 'rails_helper'
 describe Trip::Invite do
   let(:trip_invite) { described_class }
   let(:invite) { create(:trip_invite) }
+  let(:invite_manager) { Trip::InviteManager }
 
   describe 'validations' do
     it 'factory girl is valid' do
@@ -57,12 +58,12 @@ describe Trip::Invite do
 
   describe 'rvsp' do
     it 'if rvsp set to true, makes call to TripInviteManager to add user' do
-      expect(Trip::InviteManager).to receive(:invite_accepted)
+      expect(invite_manager).to receive(:invite_accepted)
       invite.update!(rvsp: true)
     end
 
     it 'if rvsp is set to false, does not make call TripInviteManager' do
-      expect(Trip::InviteManager).to receive(:invite_accepted).never
+      expect(invite_manager).to receive(:invite_accepted).never
       invite.update!(rvsp: false)
     end
   end
@@ -77,6 +78,29 @@ describe Trip::Invite do
 
     it 'returns false if rvsp not given' do
       expect(invite).not_to be_responded
+    end
+  end
+
+  describe 'destroy' do
+    let!(:invite) { create(:accepted_trip_invite) }
+
+    it 'calls invite manager with remove participant' do
+      expect(invite_manager).to receive(:remove_participant).with(trip: invite.trip, email: invite.email)
+      invite.destroy!
+    end
+
+    it 'calls TripInviteManager with remove participant' do
+      expect(invite_manager).to receive(:remove_participant).with(trip: invite.trip, email: invite.email)
+      invite.destroy!
+    end
+
+    context 'when rvsp not accepted' do
+      it 'does not call the invite manager' do
+        invite.update(rvsp: false)
+
+        expect(invite_manager).not_to receive(:remove_participant)
+        invite.destroy!
+      end
     end
   end
 end

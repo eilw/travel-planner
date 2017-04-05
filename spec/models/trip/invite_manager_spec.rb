@@ -51,4 +51,27 @@ describe Trip::InviteManager do
       end
     end
   end
+
+  describe '.remove_participant' do
+    it 'removes the participant from the trip' do
+      trip = create(:trip, participants: [user])
+      manager.remove_participant(trip: trip, email: user.email)
+
+      expect(trip.participants).to_not include(user)
+    end
+
+    it 'does not delete the user' do
+      trip = create(:trip, participants: [user])
+      manager.remove_participant(trip: trip, email: user.email)
+
+      expect(user).to be_valid
+    end
+
+    it 'deals with if a user cannot be found' do
+      trip = create(:trip, participants: [user])
+      manager.remove_participant(trip: trip, email: 'incorrect@email.com')
+
+      expect(trip.participants.count).to eq(2)
+    end
+  end
 end

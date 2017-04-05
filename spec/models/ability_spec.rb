@@ -18,11 +18,20 @@ describe Ability do
       it { is_expected.to be_able_to(:read, trip) }
       it { is_expected.not_to be_able_to(:delete, trip) }
     end
+
+    context 'organiser' do
+      let(:trip) { create(:trip, organiser: user) }
+
+      it { is_expected.to be_able_to(:manage, trip) }
+    end
   end
 
-  describe 'organiser' do
-    let(:trip) { create(:trip, organiser: user) }
+  describe 'trip invite' do
+    context 'an organiser' do
+      let(:trip) { create(:trip, organiser: user) }
+      let(:trip_invite) { create(:trip_invite, trip: trip) }
 
-    it { is_expected.to be_able_to(:manage, trip) }
+      it { is_expected.to be_able_to(:destroy, trip_invite) }
+    end
   end
 end

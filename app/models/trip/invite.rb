@@ -13,6 +13,7 @@ class Trip::Invite < ApplicationRecord
   after_update :update_responded_at, if: :rvsp_changed?
   after_update :invite_accepted, if: :rvsp_changed?
   after_create :send_invite
+  before_destroy :remove_participant, if: :rvsp?
 
   def responded?
     responded_at.present?
@@ -21,7 +22,11 @@ class Trip::Invite < ApplicationRecord
   private
 
   def invite_accepted
-    Trip::InviteManager.invite_accepted(invite: self, email: email) if rvsp
+    invite_manager.invite_accepted(invite: self, email: email) if rvsp
+  end
+
+  def remove_participant
+    invite_manager.remove_participant(trip: trip, email: email)
   end
 
   def update_responded_at
@@ -30,6 +35,10 @@ class Trip::Invite < ApplicationRecord
 
   def send_invite
     mailer.send_new_invitation(self, trip).deliver_now
+  end
+
+  def invite_manager
+    Trip::InviteManager
   end
 
   def mailer

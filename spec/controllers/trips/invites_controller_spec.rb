@@ -1,12 +1,13 @@
 require 'rails_helper'
 
 describe Trips::InvitesController do
-  let(:trip) { create(:trip) }
+  let(:user) { create(:user) }
+  let(:trip) { create(:trip, participants: [user]) }
   let(:trip_invite) { Trip::Invite }
   let(:email) { "test@email.com" }
   let(:emails) { "test2@email.com, test3@email.com" }
 
-  login_user
+  before { sign_in user }
 
   describe '#create' do
     context 'when successful' do
@@ -71,6 +72,32 @@ describe Trips::InvitesController do
       it 'redirects to root' do
         get :rvsp, params: { id: trip_invite.id, token: trip_invite.token, rvsp: 'false' }
         expect(response).to redirect_to(root_path)
+      end
+    end
+  end
+
+  describe '#destroy' do
+    let(:trip) { create(:trip, organiser: user) }
+    let!(:trip_invite) { create(:trip_invite, trip: trip) }
+
+    context 'an organiser' do
+      it 'deletes the invite' do
+        expect { post :destroy, params: { id: trip_invite.id } }.
+          to change { Trip::Invite.count }.by(-1)
+      end
+
+      it 'redirects to the new trip invite path' do
+        post :destroy, params: { id: trip_invite.id }
+        expect(response).to redirect_to(new_trip_invite_path(trip))
+      end
+    end
+
+    context 'an participant' do
+      let(:trip) { create(:trip, participants: [user]) }
+
+      it 'raises access is denied' do
+        expect { post :destroy, params: { id: trip_invite.id } }.
+          to raise_error(CanCan::AccessDenied)
       end
     end
   end
