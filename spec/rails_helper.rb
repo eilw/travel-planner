@@ -52,6 +52,7 @@ RSpec.configure do |config|
     Warden.test_reset!
   end
   config.include Devise::TestHelpers, type: :controller
+  config.include Devise::Test::IntegrationHelpers, type: :feature
   config.extend ControllerMacros, type: :controller
 
   # RSpec Rails can automatically mix in different behaviours to your tests

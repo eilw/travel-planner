@@ -1,5 +1,6 @@
 class Trips::InvitesController < ApplicationController
   before_action :authenticate_user!, except: :rvsp
+
   def new
     build_invite_builder
   end
@@ -14,8 +15,18 @@ class Trips::InvitesController < ApplicationController
     end
   end
 
+  def destroy
+    invite = invite_scope.find(params.fetch(:id))
+    authorize! :destroy, invite
+
+    trip = invite.trip
+    invite.destroy
+
+    redirect_to new_trip_invite_path(trip)
+  end
+
   def rvsp
-    invite = Trip::Invite.find_by(token: params[:token])
+    invite = invite_scope.find_by(token: params[:token])
     if invite.update!(rvsp: params[:rvsp]) && invite.rvsp
       flash[:notice] = 'Thanks for your response'
       redirect_to(trip_path(invite.trip))
@@ -32,15 +43,20 @@ class Trips::InvitesController < ApplicationController
   end
 
   def build_invite
-    @invite = invite_scope.build
+    @invite = trip_invite_scope.build
   end
 
   def invite_scope
+    Trip::Invite.all
+  end
+
+  def trip_invite_scope
     trip.invites
   end
 
   def trip
     @trip ||= Trip.find(params[:trip_id])
+    authorize! :read, @trip
   end
 
   def invite_params

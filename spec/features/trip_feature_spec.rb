@@ -79,4 +79,39 @@ feature 'Trip' do
     click_link('My trips')
     expect(page).to have_content('My description')
   end
+
+  scenario 'An organiser can remove a participant from the trip' do
+    organiser = create(:user)
+    invitee = create(:user)
+    trip = create(:trip, name: 'Sarajevo', organiser: organiser)
+    trip_invite = create(:trip_invite, trip: trip, email: invitee.email)
+    trip_invite.update!(rvsp: true)
+
+    login_user(organiser)
+    click_link('My trips')
+    click_link('Sarajevo')
+    click_link('Trip invites')
+    click_link('Remove')
+    click_link('Back to trip')
+    expect(page).to have_content('Trip invites: 0 invitations')
+
+    sign_out(organiser)
+    sign_in(invitee)
+    click_link('My trips')
+    expect(page).to_not have_content('Sarajevo')
+  end
+
+  scenario 'A participant does not have the remove invite option' do
+    invitee = create(:user)
+    trip = create(:trip, name: 'Sarajevo', participants: [invitee])
+    trip_invite = create(:trip_invite, trip: trip, email: 'test@email.com')
+    trip_invite.update!(rvsp: true)
+
+    login_user(invitee)
+    click_link('My trips')
+    click_link('Sarajevo')
+    expect(page).to have_content('Trip invites: 1 invitations')
+    click_link('Trip invites')
+    expect(page).not_to have_selector(:link_or_button, 'Remove', exact: true)
+  end
 end

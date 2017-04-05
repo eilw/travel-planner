@@ -13,3 +13,5 @@
       - @trip.invites.each do |invite|
         - if invite.valid?
           %li= invite.email + " Status: #{rvsp_state(invite)}"
+          - if can? :destroy, invite
+            = link_to 'Remove', invite_path(invite), method: :delete
