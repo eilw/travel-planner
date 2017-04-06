@@ -1,0 +1,107 @@
+//  Table of Contents:
+//
+//   1. Global
+//   2. Base Typography
+//   3. Typography Helpers
+//   4. Look and feel
+//================================
+
+
+// 1. Global
+// ---------------------
+$palettes: (
+  green: (
+    base: #178e96,
+    light: #9bced2
+  ),
+  grey:  (
+    base: #4a4a4a,
+    light: #d8d8d8,
+    dark: #ededed
+  )
+);
+
+@function pick-color($selected-color, $tone: 'base') {
+  @return map-get(map-get($palettes, $selected-color), $tone);
+}
+// 2. Base Typography
+// ---------------------
+$body-font-family: 'Nunito Sans', Helvetica, Roboto, Arial, sans-serif;
+$header-font-family: $body-font-family;
+$regular: 400;
+$light: 300;
+$bold: 700;
+$extra-bold: 800;
+
+h1, h2, h3, h4, h5, h6, p {
+  color: pick-color(grey, base);
+}
+
+h1 {
+  font-size: 2rem;
+  font-weight: $light;
+  letter-spacing: .0625rem;
+  line-height: 2.25rem;
+}
+
+h2 {
+  font-size: 1.75rem;
+  font-weight: $bold;
+  letter-spacing: .125rem;
+  line-height: 2.25rem;
+}
+
+h3 {
+  font-size: 1.25rem;
+  font-weight: $extra-bold;
+  letter-spacing: .125rem;
+  line-height: 1.75rem;
+}
+
+p {
+  font-size: 1rem;
+  font-weight: $regular;
+  line-height: 1.5rem;
+
+  .small-body {
+    font-size: .75rem;
+    font-weight: $regular;
+    line-height: 1rem;
+  }
+}
+
+// 3. Typography helpers
+// ---------------------
+.uppercase {
+  text-transform: uppercase;
+}
+
+.right-align {
+  text-align: right;
+}
+
+// 4. Look and feel
+// ---------------------
+.frame {
+  height: 600px;
+  padding: 0;
+  width: 100%;
+}
+
+.slidee {
+  cursor: -webkit-grab;
+  cursor: -moz-grab;
+  cursor: grab;
+  float: left;
+  height: 100%;
+  list-style: none;
+  margin: 0 5px 0 0;
+  padding: 0;
+
+  li {
+    float: left;
+    height: 100%;
+    margin-right: 2rem;
+    width: 300px;
+  }
+}
