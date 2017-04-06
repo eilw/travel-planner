@@ -1,6 +1,9 @@
 require 'rails_helper'
 
 describe TripsController do
+  let(:trip) { create(:trip, organiser: user) }
+  let(:user) { create(:user) }
+
   context 'when not logged in' do
     it 'redirects to sign in path' do
       get :new
@@ -9,7 +12,7 @@ describe TripsController do
   end
 
   context 'when logged in' do
-    login_user
+    before { sign_in user }
 
     describe 'new' do
       it 'renders new' do
@@ -22,6 +25,7 @@ describe TripsController do
       context 'when not a participant' do
         it 'raises access denied' do
           trip = create(:trip)
+
           expect { get :show, params: { id: trip.id } }.to raise_error(CanCan::AccessDenied)
         end
       end
@@ -37,6 +41,29 @@ describe TripsController do
 
         it 'redirects to trip path' do
           expect(response).to redirect_to(trip_path(Trip.last))
+        end
+      end
+    end
+
+    describe '#destroy' do
+      context 'when an organiser' do
+        before { trip }
+
+        it 'deletes the trip' do
+          expect { post :destroy, params: { id: trip.id } }.to change { Trip.all.count }.by(-1)
+        end
+
+        it 'redirects to trips path' do
+          post :destroy, params: { id: trip.id }
+          expect(response).to redirect_to(trips_path)
+        end
+      end
+
+      context 'when a participant' do
+        let!(:trip) { create(:trip, participants: [user]) }
+
+        it 'raises access denied' do
+          expect { post :destroy, params: { id: trip.id } }.to raise_error(CanCan::AccessDenied)
         end
       end
     end

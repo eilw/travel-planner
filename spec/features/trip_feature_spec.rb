@@ -20,6 +20,25 @@ feature 'Trip' do
     expect(page).not_to have_content('Another trip')
   end
 
+  scenario 'An organiser can delete a trip' do
+    user = create(:user)
+    create(:trip, organiser: user)
+    login_user(user)
+    click_link('My trips')
+    expect(page).to have_content('Sarajevo')
+    click_link('Remove')
+    expect(page).to_not have_content('Sarajevo')
+  end
+
+  scenario 'A participant can not delete a trip' do
+    user = create(:user)
+    create(:trip, participants: [user])
+    login_user(user)
+    click_link('My trips')
+    expect(page).to have_content('Sarajevo')
+    expect(page).not_to have_selector(:link_or_button, 'Remove', exact: true)
+  end
+
   scenario 'A user can invite other people to a trip using their emails' do
     login_user
     create_trip(name: 'A trip', description: 'Our trip to Italy')
@@ -77,7 +96,7 @@ feature 'Trip' do
     trip_invite.update!(rvsp: true)
     login_user(invitee)
     click_link('My trips')
-    expect(page).to have_content('My description')
+    expect(page).to have_content('Sarajevo')
   end
 
   scenario 'An organiser can remove a participant from the trip' do

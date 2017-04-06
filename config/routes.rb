@@ -3,7 +3,7 @@ Rails.application.routes.draw do
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
   root to: "home#index"
   resource :home, only: [:index]
-  resources :trips, only: [:new, :create, :show, :index], shallow: true do
+  resources :trips, only: [:new, :create, :show, :index, :destroy], shallow: true do
     resources :destinations, only: [:new, :create], controller: "trips/destinations"
     resources :date_options, only: [:new, :create], controller: "trips/date_options"
 
