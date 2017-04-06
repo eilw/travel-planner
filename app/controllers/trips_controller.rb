@@ -19,6 +19,13 @@ class TripsController < ApplicationController
     save_trip || render(:new)
   end
 
+  def destroy
+    load_trip
+    @trip.destroy!
+
+    redirect_to trips_path
+  end
+
   private
 
   def load_trips
@@ -26,7 +33,7 @@ class TripsController < ApplicationController
   end
 
   def load_trip
-    @trip ||= trip_scope.find(params[:id])
+    @trip ||= trip_scope.find(params.fetch(:id))
   end
 
   def build_trip

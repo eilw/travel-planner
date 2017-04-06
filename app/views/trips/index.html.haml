@@ -3,3 +3,6 @@
   %p
     = link_to trip.name.to_s + ":", trip_path(trip)
     = trip.description.to_s
+
+    - if can? :destroy, trip
+      = link_to 'Remove', trip_path(trip), method: :delete

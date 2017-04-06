@@ -30,8 +30,7 @@ feature 'Add invitations when signup' do
       create(:trip_invite, email: 'invite@email.com', rvsp: true, responded_at: Time.zone.now)
       sign_up(email: 'invite@email.com')
       click_link('My trips')
-      expect(page).to have_content('My trip')
-      expect(page).to have_content('My description')
+      expect(page).to have_content('Sarajevo')
     end
   end
 end
