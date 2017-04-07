@@ -8,11 +8,17 @@ class Ability
     end
     can [:manage], Trip, organiser: user
     can [:destroy], Trip::Invite do |invite|
-      Trip.find(invite.trip_id).organiser == user
+      invite.trip.organiser == user
     end
 
-    can [:read, :create], Trip::InviteBuilder do |builder|
-      Trip.find(builder.trip_id).participants.include?(user)
+    can [:destroy], Trip::Destination do |destination|
+      user.trip_participants.include?(destination.creator)
     end
+
+    can [:destroy], Trip::DateOption do |date_option|
+      user.trip_participants.include?(date_option.creator)
+    end
+
+    can [:destroy], Comment, author: user
   end
 end
