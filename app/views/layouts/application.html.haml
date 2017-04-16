@@ -4,8 +4,9 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     %title TravelPlanner
-    = stylesheet_link_tag 'application'
+    = stylesheet_link_tag 'application', "https://fonts.googleapis.com/css?family=Nunito+Sans:300,400,700,800"
     = javascript_include_tag 'application', 'data-turbolinks-track': true
+    %script(src="https://cdnjs.cloudflare.com/ajax/libs/Sly/1.6.1/sly.min.js")
     = csrf_meta_tags
   %body
     %nav.navbar.navbar-default.navbar-fixed-top
@@ -30,4 +31,3 @@
     %p.notice= notice
     %p.alert= alert
     = yield
-

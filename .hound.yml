@@ -1,5 +1,6 @@
 scss:
   enabled: true
+  config_file: "./vendor/.sass-lint.yml"
 
 ruby:
   config_file: .rubocop.yml
