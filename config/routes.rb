@@ -4,14 +4,14 @@ Rails.application.routes.draw do
   root to: "home#index"
   resource :home, only: [:index]
   resources :trips, only: [:new, :create, :show, :index, :destroy], shallow: true do
-    resources :destinations, only: [:new, :create], controller: "trips/destinations"
-    resources :date_options, only: [:new, :create], controller: "trips/date_options"
+    resources :destinations, only: [:new, :create, :destroy], controller: "trips/destinations"
+    resources :date_options, only: [:new, :create, :destroy], controller: "trips/date_options"
 
     resources :invites, only: [:new, :create, :destroy], controller: "trips/invites" do
       get :rvsp, on: :member
     end
   end
 
-  resources :comments, only: [:new, :create]
+  resources :comments, only: [:new, :create, :destroy]
   resources :votes, only: [:create]
 end

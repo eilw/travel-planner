@@ -34,4 +34,46 @@ describe Ability do
       it { is_expected.to be_able_to(:destroy, trip_invite) }
     end
   end
+
+  describe 'trip destination' do
+    context 'the creator' do
+      let(:trip) { create(:trip, organiser: user) }
+      let(:trip_destination) { create(:trip_destination, trip: trip, creator: user.trip_participants.first) }
+      it { is_expected.to be_able_to(:destroy, trip_destination) }
+    end
+
+    context 'a participant' do
+      let(:trip) { create(:trip, participants: [user]) }
+      let(:trip_destination) { create(:trip_destination, trip: trip) }
+
+      it { is_expected.not_to be_able_to(:destroy, trip_destination) }
+    end
+  end
+
+  describe 'trip date option' do
+    context 'the creator' do
+      let(:trip) { create(:trip, organiser: user) }
+      let(:trip_date_option) { create(:trip_date_option, trip: trip, creator: user.trip_participants.first) }
+      it { is_expected.to be_able_to(:destroy, trip_date_option) }
+    end
+
+    context 'a participant' do
+      let(:trip) { create(:trip, participants: [user]) }
+      let(:trip_date_option) { create(:trip_date_option, trip: trip) }
+
+      it { is_expected.not_to be_able_to(:destroy, trip_date_option) }
+    end
+  end
+
+  describe 'comment' do
+    context 'the author' do
+      let(:comment) { create(:comment, author: user) }
+      it { is_expected.to be_able_to(:destroy, comment) }
+    end
+
+    context 'not the author' do
+      let(:comment) { create(:comment) }
+      it { is_expected.to_not be_able_to(:destroy, comment) }
+    end
+  end
 end

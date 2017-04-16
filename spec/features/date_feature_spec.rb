@@ -18,6 +18,29 @@ feature 'Date' do
     expect(page).to have_content(range)
   end
 
+  scenario 'A participant can remove a date_option they have added' do
+    participant = create(:user)
+    trip = create(:trip, participants: [participant])
+    create(:trip_date_option, trip: trip, creator: participant.trip_participants.first)
+
+    login_user(participant)
+    click_link('My trips')
+    click_link('Reunion')
+    click_link('Remove')
+    expect(page).not_to have_content('Sarajevo')
+  end
+
+  scenario 'A participant cannot remove a date_option from someone else' do
+    participant = create(:user)
+    trip = create(:trip, participants: [participant])
+    create(:trip_date_option, trip: trip)
+
+    login_user(participant)
+    click_link('My trips')
+    click_link('Reunion')
+    expect(page).not_to have_selector(:link_or_button, 'Remove', exact: true)
+  end
+
   scenario 'A participant can comment on a date option' do
     login_user
     create_trip(name: 'A trip', description: 'Our trip to Italy')

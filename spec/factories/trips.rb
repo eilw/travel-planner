@@ -1,7 +1,7 @@
 FactoryGirl.define do
   factory :trip do
-    name 'Sarajevo'
-    description 'Let us meet there'
+    name 'Reunion'
+    description 'Let us organise it'
     association :organiser, factory: :user
   end
 end

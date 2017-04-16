@@ -1,5 +1,6 @@
 class CommentsController < ApplicationController
   before_action :authenticate_user!
+  load_and_authorize_resource only: :destroy
 
   def new
     build_comment
@@ -8,6 +9,12 @@ class CommentsController < ApplicationController
   def create
     build_comment
     save_comment || render(:new)
+  end
+
+  def destroy
+    trip = @comment.commentable.trip
+    @comment.destroy
+    redirect_to trip_path(trip)
   end
 
   private

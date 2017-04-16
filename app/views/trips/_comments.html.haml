@@ -1,4 +1,6 @@
 %p Comments:
 - commentable.comments.each do |comment|
   %p #{comment.author.username}: #{comment.text} at #{comment.added_at}
+  - if can? :destroy, comment
+    = link_to 'Remove', comment_path(comment), method: :delete
 = link_to "Add comment", new_comment_path(commentable_type: commentable_type, commentable_id: commentable.id)

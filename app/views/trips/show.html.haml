@@ -14,18 +14,25 @@
     .small-12.columns
       .frame
         %ul.slidee
-          - @trip.destinations.each do |destination|
+          = render partial: "destinations", locals: { destinations: @trip.destinations }
+
+  .row
+    .small-8.columns
+      %h3.uppercase Dates:
+    .small-3.columns
+      = link_to "Add date", new_trip_date_option_path(@trip), class: 'button'
+
+.section
+  .row
+    .small-12.columns
+      .frame
+        %ul.slidee
+          - @trip.date_options.each do |date|
             %li
               .card
                 .card-section
-                  %h1= destination.name + ": " + destination.description
-                  = render partial: "votes", locals: { votable: destination, votable_type: 'trip/destination', id_type: 'destination' }
-                  = render partial: "comments", locals: { commentable: destination, commentable_type: 'trip/destination' }
-
-      %h3 Dates:
-      %p= link_to "Add date", new_trip_date_option_path(@trip), class: 'button'
-
-      - @trip.date_options.each do |date|
-        %p= date.range
-        = render partial: "votes", locals: { votable: date, votable_type: 'trip/date_option', id_type: 'date_option' }
-        = render partial: "comments", locals: { commentable: date, commentable_type: 'trip/date_option' }
+                  %h1= date.range
+                  - if can? :destroy, date
+                    = link_to 'Remove', date_option_path(date), method: :delete
+                  = render partial: "votes", locals: { votable: date, votable_type: 'trip/date_option', id_type: 'date_option' }
+                  = render partial: "comments", locals: { commentable: date, commentable_type: 'trip/date_option' }

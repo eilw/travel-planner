@@ -13,6 +13,29 @@ feature 'Destination' do
     expect(page).to have_content('Sarajevo option: Why we should go there')
   end
 
+  scenario 'A participant can remove a destination option they have added' do
+    participant = create(:user)
+    trip = create(:trip, participants: [participant])
+    create(:trip_destination, trip: trip, creator: participant.trip_participants.first)
+
+    login_user(participant)
+    click_link('My trips')
+    click_link('Reunion')
+    click_link('Remove')
+    expect(page).not_to have_content('Sarajevo')
+  end
+
+  scenario 'A participant cannot remove a destination option from someone else' do
+    participant = create(:user)
+    trip = create(:trip, participants: [participant])
+    create(:trip_destination, trip: trip)
+
+    login_user(participant)
+    click_link('My trips')
+    click_link('Reunion')
+    expect(page).not_to have_selector(:link_or_button, 'Remove', exact: true)
+  end
+
   scenario 'A participant can comment on a destination option' do
     login_user
     create_trip(name: 'A trip', description: 'Our trip to Italy')
@@ -53,14 +76,4 @@ def add_destination(name: 'Sarajevo option', description: 'Why we should go ther
   fill_in('trip_destination_name', with: name)
   fill_in('trip_destination_description', with: description)
   click_button('Add destination')
-end
-
-def wait_for_ajax
-  Timeout.timeout(Capybara.default_max_wait_time) do
-    loop until finished_all_ajax_requests?
-  end
-end
-
-def finished_all_ajax_requests?
-  page.evaluate_script('jQuery.active').zero?
 end
