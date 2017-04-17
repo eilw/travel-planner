@@ -7,6 +7,7 @@ class Ability
       trip.participants.include?(user)
     end
     can [:manage], Trip, organiser: user
+    can [:update], Trip::Invite, email: user.email
     can [:destroy], Trip::Invite do |invite|
       invite.trip.organiser == user
     end

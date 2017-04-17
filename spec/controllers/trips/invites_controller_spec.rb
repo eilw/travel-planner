@@ -7,97 +7,131 @@ describe Trips::InvitesController do
   let(:email) { "test@email.com" }
   let(:emails) { "test2@email.com, test3@email.com" }
 
-  before { sign_in user }
-
-  describe '#create' do
-    context 'when successful' do
-      context 'when a single email' do
-        before { post :create, params: { trip_id: trip.id, trip_invite_builder: { emails: email } } }
-
-        it 'creates a trip invite' do
-          expect(trip_invite.where(email: email).count).to eq(1)
-        end
-
-        it 'the trip invite is associated to the trip' do
-          expect(trip.invites.where(email: email).count).to eq(1)
-        end
-
-        it 'redirects to new_trip_invite path' do
-          expect(response).to redirect_to(new_trip_invite_path)
-        end
-      end
-
-      context 'when multiple emails are added' do
-        before { post :create, params: { trip_id: trip.id, trip_invite_builder: { emails: emails } } }
-
-        it 'creates a trip invite for each email' do
-          expect(trip_invite.count).to eq(2)
-        end
-      end
-    end
-
-    context 'when unsuccessful' do
-      before { post :create, params: { trip_id: trip.id, trip_invite_builder: { emails: 'invalid' } } }
-
-      it 'no invite is created' do
-        expect(trip_invite.count).to eq(0)
-      end
-
-      it 'does not redirect' do
-        expect(response).not_to redirect_to(new_trip_invite_path)
-      end
+  context 'when not logged in' do
+    it 'redirects to sign in path' do
+      post :create, params: { trip_id: trip.id, trip_invite_builder: { emails: email } }
+      expect(response).to redirect_to(new_user_session_path)
     end
   end
 
-  describe '#rvsp' do
-    let!(:trip_invite) { create(:trip_invite) }
+  context 'when logged in' do
+    before { sign_in user }
 
-    context 'responds with rvsp true' do
-      before { get :rvsp, params: { id: trip_invite.id, token: trip_invite.token, rvsp: 'true' } }
+    describe '#create' do
+      context 'when successful' do
+        context 'when a single email' do
+          before { post :create, params: { trip_id: trip.id, trip_invite_builder: { emails: email } } }
 
-      it 'updates the rvsp for the trip invite' do
-        expect(trip_invite.reload.rvsp).to eq(true)
+          it 'creates a trip invite' do
+            expect(trip_invite.where(email: email).count).to eq(1)
+          end
+
+          it 'the trip invite is associated to the trip' do
+            expect(trip.invites.where(email: email).count).to eq(1)
+          end
+
+          it 'redirects to new_trip_invite path' do
+            expect(response).to redirect_to(new_trip_invite_path)
+          end
+        end
+
+        context 'when multiple emails are added' do
+          before { post :create, params: { trip_id: trip.id, trip_invite_builder: { emails: emails } } }
+
+          it 'creates a trip invite for each email' do
+            expect(trip_invite.count).to eq(2)
+          end
+        end
       end
 
-      it 'updates the responded_at timestamp' do
-        expect(trip_invite.reload).to be_responded
-      end
+      context 'when unsuccessful' do
+        before { post :create, params: { trip_id: trip.id, trip_invite_builder: { emails: 'invalid' } } }
 
-      it 'redirects to trip path' do
-        expect(response).to redirect_to(trip_path(trip_invite.trip))
+        it 'no invite is created' do
+          expect(trip_invite.count).to eq(0)
+        end
+
+        it 'does not redirect' do
+          expect(response).not_to redirect_to(new_trip_invite_path)
+        end
       end
     end
 
-    context 'responds with rvsp false' do
-      it 'redirects to root' do
-        get :rvsp, params: { id: trip_invite.id, token: trip_invite.token, rvsp: 'false' }
-        expect(response).to redirect_to(root_path)
+    describe '#rvsp' do
+      let!(:trip_invite) { create(:trip_invite) }
+
+      context 'responds with rvsp true' do
+        before { get :rvsp, params: { id: trip_invite.id, token: trip_invite.token, rvsp: 'true' } }
+
+        it 'updates the rvsp for the trip invite' do
+          expect(trip_invite.reload.rvsp).to eq(true)
+        end
+
+        it 'updates the responded_at timestamp' do
+          expect(trip_invite.reload).to be_responded
+        end
+
+        it 'redirects to trip path' do
+          expect(response).to redirect_to(trip_path(trip_invite.trip))
+        end
+      end
+
+      context 'responds with rvsp false' do
+        it 'redirects to root' do
+          get :rvsp, params: { id: trip_invite.id, token: trip_invite.token, rvsp: 'false' }
+          expect(response).to redirect_to(root_path)
+        end
       end
     end
-  end
 
-  describe '#destroy' do
-    let(:trip) { create(:trip, organiser: user) }
-    let!(:trip_invite) { create(:trip_invite, trip: trip) }
+    describe '#destroy' do
+      let(:trip) { create(:trip, organiser: user) }
+      let!(:trip_invite) { create(:trip_invite, trip: trip) }
 
-    context 'an organiser' do
-      it 'deletes the invite' do
-        expect { post :destroy, params: { id: trip_invite.id } }.
-          to change { Trip::Invite.count }.by(-1)
+      context 'an organiser' do
+        it 'deletes the invite' do
+          expect { post :destroy, params: { id: trip_invite.id } }.
+            to change { Trip::Invite.count }.by(-1)
+        end
+
+        it 'redirects to the new trip invite path' do
+          post :destroy, params: { id: trip_invite.id }
+          expect(response).to redirect_to(new_trip_invite_path(trip))
+        end
       end
 
-      it 'redirects to the new trip invite path' do
-        post :destroy, params: { id: trip_invite.id }
-        expect(response).to redirect_to(new_trip_invite_path(trip))
+      context 'an participant' do
+        let(:trip) { create(:trip, participants: [user]) }
+
+        it 'raises access is denied' do
+          expect { post :destroy, params: { id: trip_invite.id } }.
+            to raise_error(CanCan::AccessDenied)
+        end
       end
     end
 
-    context 'an participant' do
-      let(:trip) { create(:trip, participants: [user]) }
+    describe '#update' do
+      context 'when invited' do
+        let!(:trip_invite) { create(:trip_invite, email: user.email) }
 
-      it 'raises access is denied' do
-        expect { post :destroy, params: { id: trip_invite.id } }.
-          to raise_error(CanCan::AccessDenied)
+        before { patch :update, params: { id: trip_invite.id, trip_invite: { rvsp: true } } }
+
+        it 'can update the rvsp of the invite' do
+          expect(trip_invite.reload.rvsp).to eq(true)
+        end
+
+        it 'redirects to the new trip invite path' do
+          expect(response).to redirect_to(trips_path)
+        end
+      end
+
+      context 'when not invited' do
+        let!(:trip_invite) { create(:trip_invite) }
+
+        it 'raises access is denied' do
+          expect { patch :update, params: { id: trip_invite.id, trip_invite: { rvsp: true } } }
+            .to raise_error(CanCan::AccessDenied)
+        end
       end
     end
   end

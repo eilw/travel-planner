@@ -32,6 +32,13 @@ describe Ability do
       let(:trip_invite) { create(:trip_invite, trip: trip) }
 
       it { is_expected.to be_able_to(:destroy, trip_invite) }
+      it { is_expected.to_not be_able_to(:update, trip_invite) }
+    end
+
+    context 'the invitee' do
+      let(:trip_invite) { create(:trip_invite, email: user.email) }
+
+      it { is_expected.to be_able_to(:update, trip_invite) }
     end
   end
 
