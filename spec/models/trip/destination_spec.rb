@@ -15,4 +15,8 @@ describe Trip::Destination do
       expect(invalid_destination).to be_invalid
     end
   end
+
+  describe 'optionable' do
+    it_behaves_like 'optionable'
+  end
 end

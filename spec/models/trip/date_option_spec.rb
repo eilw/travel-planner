@@ -15,4 +15,8 @@ describe Trip::DateOption do
       expect(invalid_date).to be_invalid
     end
   end
+
+  describe 'optionable' do
+    it_behaves_like 'optionable'
+  end
 end

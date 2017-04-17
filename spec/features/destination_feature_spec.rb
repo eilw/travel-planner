@@ -10,7 +10,8 @@ feature 'Destination' do
     fill_in('trip_destination_name', with: 'Sarajevo option')
     fill_in('trip_destination_description', with: 'Why we should go there')
     click_button('Add destination')
-    expect(page).to have_content('Sarajevo option: Why we should go there')
+    expect(page).to have_content('Sarajevo option')
+    expect(page).to have_content('Why we should go there')
   end
 
   scenario 'A participant can remove a destination option they have added' do

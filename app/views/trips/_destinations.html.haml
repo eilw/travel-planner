@@ -1,9 +1,10 @@
-- destinations.each do |destination|
+- destinations.sort_by(&:vote_score).reverse.each do |destination|
   %li
     .card
       .card-section
-        %h1= destination.name + ": " + destination.description
+        %h1= destination.name
+        = destination.description
         - if can? :destroy, destination
-          = link_to 'Remove', destination_path(destination), method: :delete
+          %br= link_to 'Remove', destination_path(destination), method: :delete
         = render partial: "votes", locals: { votable: destination, votable_type: 'trip/destination', id_type: 'destination' }
         = render partial: "comments", locals: { commentable: destination, commentable_type: 'trip/destination' }
