@@ -6,3 +6,11 @@
 
     - if can? :destroy, trip
       = link_to 'Remove', trip_path(trip), method: :delete
+
+%h3 My invites
+- @invites.each do |invite|
+  = invite.trip.name.to_s
+  Rvsp: #{rvsp_state(invite)}
+  = simple_form_for invite, url: invite_url(invite) do |f|
+    = f.input :rvsp, collection: [['Accept', true], ['Reject', false]], as: :radio_buttons
+    = f.submit :Respond

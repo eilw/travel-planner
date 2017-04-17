@@ -3,6 +3,7 @@ class TripsController < ApplicationController
   load_and_authorize_resource
 
   def index
+    load_invites
     load_trips
   end
 
@@ -27,6 +28,10 @@ class TripsController < ApplicationController
   end
 
   private
+
+  def load_invites
+    @invites ||= Trip::Invite.where(email: current_user.email)
+  end
 
   def load_trips
     @trips ||= trip_scope.to_a

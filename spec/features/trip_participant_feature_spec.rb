@@ -97,4 +97,21 @@ feature 'Trip' do
     click_link('Trip invites')
     expect(page).not_to have_selector(:link_or_button, 'Remove', exact: true)
   end
+
+  scenario 'A invitee can update their rvsp to their trip invitations' do
+    invitee = create(:user)
+    trip = create(:trip)
+    create(:trip_invite, trip: trip, email: invitee.email)
+
+    login_user(invitee)
+    click_link('My trips')
+    expect(page).to have_content(trip.name)
+    expect(page).to_not have_content(trip.description)
+    expect(page).to have_content('Rvsp: Pending')
+
+    choose('Accept')
+    click_button('Respond')
+    expect(page).to have_content('Rvsp: Accepted')
+    expect(page).to have_content(trip.description)
+  end
 end

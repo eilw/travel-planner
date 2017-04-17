@@ -1,5 +1,6 @@
 class Trips::InvitesController < ApplicationController
   before_action :authenticate_user!, except: :rvsp
+  load_and_authorize_resource class: "Trip::Invite", only: [:update, :destroy]
 
   def new
     build_invite_builder
@@ -15,12 +16,14 @@ class Trips::InvitesController < ApplicationController
     end
   end
 
-  def destroy
-    invite = invite_scope.find(params.fetch(:id))
-    authorize! :destroy, invite
+  def update
+    @invite.update(invite_rvsp_params)
+    redirect_to trips_path
+  end
 
-    trip = invite.trip
-    invite.destroy
+  def destroy
+    trip = @invite.trip
+    @invite.destroy
 
     redirect_to new_trip_invite_path(trip)
   end
@@ -42,21 +45,17 @@ class Trips::InvitesController < ApplicationController
     @invite_builder ||= Trip::InviteBuilder.new(invite_params)
   end
 
-  def build_invite
-    @invite = trip_invite_scope.build
-  end
-
   def invite_scope
     Trip::Invite.all
-  end
-
-  def trip_invite_scope
-    trip.invites
   end
 
   def trip
     @trip ||= Trip.find(params[:trip_id])
     authorize! :read, @trip
+  end
+
+  def invite_rvsp_params
+    params.require(:trip_invite).permit(:rvsp)
   end
 
   def invite_params

@@ -7,7 +7,7 @@ Rails.application.routes.draw do
     resources :destinations, only: [:new, :create, :destroy], controller: "trips/destinations"
     resources :date_options, only: [:new, :create, :destroy], controller: "trips/date_options"
 
-    resources :invites, only: [:new, :create, :destroy], controller: "trips/invites" do
+    resources :invites, only: [:new, :update, :create, :destroy], controller: "trips/invites" do
       get :rvsp, on: :member
     end
   end
