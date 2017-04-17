@@ -1,6 +1,7 @@
-%p Comments:
-- commentable.comments.each do |comment|
-  %p #{comment.author.username}: #{comment.text} at #{comment.added_at}
-  - if can? :destroy, comment
-    = link_to 'Remove', comment_path(comment), method: :delete
-= link_to "Add comment", new_comment_path(commentable_type: commentable_type, commentable_id: commentable.id)
+- if commentable.comments.any?
+  - commentable.comments.sort_by(&:created_at).each do |comment|
+    %p
+    #{comment.author.username}: #{comment.text} (#{time_ago_in_words(comment.added_at)} ago)
+    - if can? :destroy, comment
+      = link_to 'Remove', comment_path(comment), method: :delete
+%p= link_to "Add comment", new_comment_path(commentable_type: commentable_type, commentable_id: commentable.id)
