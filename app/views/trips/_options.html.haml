@@ -1,0 +1,9 @@
+- date_options.sort_by(&:vote_score).reverse.each do |date|
+  %li
+    .card
+      .card-section
+        %h1= date.range
+        - if can? :destroy, date
+          = link_to 'Remove', date_option_path(date), method: :delete
+        = render partial: "votes", locals: { votable: date, votable_type: 'trip/date_option', id_type: 'date_option' }
+        = render partial: "comments", locals: { commentable: date, commentable_type: 'trip/date_option' }

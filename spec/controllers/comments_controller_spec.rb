@@ -72,7 +72,8 @@ describe CommentsController do
         let!(:comment) { create(:comment, author: user) }
 
         it 'deletes the comment' do
-          expect { post :destroy, params: { id: comment.id } }.to change { Trip::Comment.all.count }.by(-1)
+          commentable = comment.commentable
+          expect { post :destroy, params: { id: comment.id } }.to change { commentable.comments.count }.by(-1)
         end
 
         it 'redirects to trips path' do
