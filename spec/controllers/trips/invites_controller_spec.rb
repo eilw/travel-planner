@@ -57,33 +57,6 @@ describe Trips::InvitesController do
       end
     end
 
-    describe '#rvsp' do
-      let!(:trip_invite) { create(:trip_invite) }
-
-      context 'responds with rvsp true' do
-        before { get :rvsp, params: { id: trip_invite.id, token: trip_invite.token, rvsp: 'true' } }
-
-        it 'updates the rvsp for the trip invite' do
-          expect(trip_invite.reload.rvsp).to eq(true)
-        end
-
-        it 'updates the responded_at timestamp' do
-          expect(trip_invite.reload).to be_responded
-        end
-
-        it 'redirects to trip path' do
-          expect(response).to redirect_to(trip_path(trip_invite.trip))
-        end
-      end
-
-      context 'responds with rvsp false' do
-        it 'redirects to root' do
-          get :rvsp, params: { id: trip_invite.id, token: trip_invite.token, rvsp: 'false' }
-          expect(response).to redirect_to(root_path)
-        end
-      end
-    end
-
     describe '#destroy' do
       let(:trip) { create(:trip, organiser: user) }
       let!(:trip_invite) { create(:trip_invite, trip: trip) }

@@ -8,10 +8,10 @@
       .actions
         = f.submit 'Send invitations', class: 'btn btn-primary'
   .col-md-4
-    %h3 Invitations
+    %h3 Participants
     %ul
       - @trip.invites.each do |invite|
         - if invite.valid?
-          %li= invite.email + " Status: #{rvsp_state(invite)}"
+          %li= invite.email
           - if can? :destroy, invite
             = link_to 'Remove', invite_path(invite), method: :delete

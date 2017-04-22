@@ -54,30 +54,10 @@ describe Trip::Invite do
     it 'sends an email' do
       expect { create(:trip_invite) }.to change { ActionMailer::Base.deliveries.count }.by(1)
     end
-  end
 
-  describe 'rvsp' do
-    it 'if rvsp set to true, makes call to TripInviteManager to add user' do
-      expect(invite_manager).to receive(:invite_accepted)
-      invite.update!(rvsp: true)
-    end
-
-    it 'if rvsp is set to false, does not make call TripInviteManager' do
-      expect(invite_manager).to receive(:invite_accepted).never
-      invite.update!(rvsp: false)
-    end
-  end
-
-  describe '#responded?' do
-    let(:invite) { create(:trip_invite) }
-
-    it 'returns true if rvsp has been responded' do
-      invite.update!(rvsp: true)
-      expect(invite).to be_responded
-    end
-
-    it 'returns false if rvsp not given' do
-      expect(invite).not_to be_responded
+    it 'adds the user as a participant' do
+      expect(invite_manager).to receive(:add_participant)
+      create(:trip_invite)
     end
   end
 
@@ -92,15 +72,6 @@ describe Trip::Invite do
     it 'calls TripInviteManager with remove participant' do
       expect(invite_manager).to receive(:remove_participant).with(trip: invite.trip, email: invite.email)
       invite.destroy!
-    end
-
-    context 'when rvsp not accepted' do
-      it 'does not call the invite manager' do
-        invite.update(rvsp: false)
-
-        expect(invite_manager).not_to receive(:remove_participant)
-        invite.destroy!
-      end
     end
   end
 end
