@@ -38,20 +38,27 @@ h1, h2, h3, h4, h5, h6, p {
 }
 
 h1 {
-  font-size: 2rem;
+  font-size: 2.75rem;
   font-weight: $light;
-  letter-spacing: .0625rem;
-  line-height: 2.25rem;
+  letter-spacing: 0.0625rem;
+  line-height: 3.25rem;
 }
 
 h2 {
-  font-size: 1.75rem;
-  font-weight: $bold;
+  font-size: 2rem;
+  font-weight: $light;
   letter-spacing: .125rem;
   line-height: 2.25rem;
 }
 
 h3 {
+  font-size: 1.25rem;
+  font-weight: $extra-bold;
+  letter-spacing: .125rem;
+  line-height: 1.75rem;
+}
+
+h4 {
   font-size: 1.25rem;
   font-weight: $extra-bold;
   letter-spacing: .125rem;
