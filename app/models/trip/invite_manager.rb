@@ -7,8 +7,7 @@ class Trip::InviteManager
     end
 
     def add_participant(invite:, email:)
-      user = user_by(email)
-      add_participant_to_trip(user: user, trip: invite.trip) if user
+      add_participant_to_trip(user: participant(email), trip: invite.trip)
     end
 
     def remove_participant(trip:, email:)
@@ -17,6 +16,10 @@ class Trip::InviteManager
     end
 
     private
+
+    def participant(email)
+      User.find_by(email: email) || User.invite!(email: email)
+    end
 
     def user_by(email)
       User.find_by(email: email)

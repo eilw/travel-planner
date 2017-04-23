@@ -6,7 +6,8 @@ Rails.application.routes.draw do
   resources :trips, only: [:new, :create, :show, :index, :destroy], shallow: true do
     resources :destinations, only: [:new, :create, :destroy], controller: "trips/destinations"
     resources :date_options, only: [:new, :create, :destroy], controller: "trips/date_options"
-    resources :invites, only: [:new, :update, :create, :destroy], controller: "trips/invites"
+    resources :invites, only: [:update, :destroy], controller: "trips/invites"
+    resources :participants, only: [:new, :create], controller: "trips/participants"
   end
 
   resources :comments, only: [:new, :create, :destroy]

@@ -25,7 +25,7 @@ class Trips::InvitesController < ApplicationController
     trip = @invite.trip
     @invite.destroy
 
-    redirect_to new_trip_invite_path(trip)
+    redirect_to new_trip_participant_path(trip)
   end
 
   private

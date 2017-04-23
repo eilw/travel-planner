@@ -44,20 +44,27 @@ describe Trip::Invite do
   end
 
   describe 'after create' do
-    it 'calls the Tripmailer with self and the trip' do
+    it 'calls the Trip mailer with self and the trip' do
       trip = create(:trip)
 
       expect(TripMailer).to receive(:send_new_invitation).with(an_instance_of(trip_invite), trip).and_call_original
       create(:trip_invite, trip: trip)
     end
 
-    it 'sends an email' do
-      expect { create(:trip_invite) }.to change { ActionMailer::Base.deliveries.count }.by(1)
+    it 'sends a welcome email and invitable email' do
+      expect { create(:trip_invite) }.to change { ActionMailer::Base.deliveries.count }.by(2)
     end
 
     it 'adds the user as a participant' do
       expect(invite_manager).to receive(:add_participant)
       create(:trip_invite)
+    end
+
+    context 'when user doesnt not already exist' do
+      it 'creates a new user' do
+        trip = create(:trip)
+        expect { create(:trip_invite, trip: trip) }.to change { User.count }.by(1)
+      end
     end
   end
 

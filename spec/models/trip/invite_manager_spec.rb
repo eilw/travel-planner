@@ -30,15 +30,6 @@ describe Trip::InviteManager do
         expect(user.trips).to eq([invite.trip])
       end
     end
-
-    context 'user doesnt exist' do
-      it 'doesnt adds the user as participant' do
-        email = 'invite@email.com'
-        invite = create(:trip_invite, email: email)
-        expect { manager.add_participant(invite: invite, email: email) }
-          .not_to change { invite.trip.participants.count }
-      end
-    end
   end
 
   describe '.remove_participant' do

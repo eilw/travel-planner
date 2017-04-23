@@ -13,5 +13,9 @@ describe TripParticipant do
       organiser = trip_participant.trip.organiser
       expect(participant.email).not_to eq(organiser.email)
     end
+
+    xit 'cannot be duplicates' do
+
+    end
   end
 end

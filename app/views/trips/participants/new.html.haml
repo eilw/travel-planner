@@ -1,0 +1,14 @@
+.row
+  .col-md-4
+    = link_to 'Back to trip', trip_path(@trip)
+  .col-md-4
+    = simple_form_for @participant_builder, url: trip_participants_path, html: { method: :post } do |f|
+      = f.input :emails, placeholder: 'anne@example.com, joe@example.com', as: :text, required: false
+      = f.input :message, placeholder: 'Hi! I am organising a trip and it would be great to have you join!'
+      .actions
+        = f.submit 'Send invitations', class: 'btn btn-primary'
+  .col-md-4
+    %h3 Participants
+    %ul
+      - @trip.participants.each do |participant|
+        %li= participant.email
