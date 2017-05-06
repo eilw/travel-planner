@@ -1,28 +1,35 @@
 .section
   .row
     .small-12.columns
+      = link_to "Trip invites: #{@trip.invites.count} invitations", new_trip_invite_path(@trip)
+
+  .row
+    .small-6.columns
       %h2= @trip.name.to_s
       %p= @trip.description.to_s
-      = link_to "Trip invites: #{@trip.invites.count} invitations", new_trip_invite_path(@trip)
-  .row
-    .small-8.columns
-      %h3.uppercase Places:
-    .small-3.columns
-      = link_to "Add destination", new_trip_destination_path(@trip), class: "button right-align"
+    .small-4.columns
+      = link_to "Edit"
+
 .section
+  .row
+    .small-6.columns
+      %h4.uppercase Places
+    .small-4.columns
+      = link_to "Add destination", new_trip_destination_path(@trip)
+
   .row
     .small-12.columns
       .frame
         %ul.slidee
           = render partial: "destinations", locals: { destinations: @trip.destinations }
 
+.section
   .row
     .small-8.columns
-      %h3.uppercase Dates:
+      %h4.uppercase Dates
     .small-3.columns
-      = link_to "Add date", new_trip_date_option_path(@trip), class: 'button'
+      = link_to "Add date", new_trip_date_option_path(@trip)
 
-.section
   .row
     .small-12.columns
       .frame
