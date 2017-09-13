@@ -26,7 +26,8 @@ end
 
 feature 'Add invitations when signup' do
   context 'Accepted invite' do
-    scenario 'A user can see trips accepted when joining' do
+    # Need to link up with invitable
+    xscenario 'A user can see trips accepted when joining' do
       create(:trip_invite, email: 'invite@email.com', rvsp: true, responded_at: Time.zone.now)
       sign_up(email: 'invite@email.com')
       click_link('My trips')

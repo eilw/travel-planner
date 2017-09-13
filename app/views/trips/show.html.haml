@@ -3,7 +3,7 @@
     .small-12.columns
       %h2= @trip.name.to_s
       %p= @trip.description.to_s
-      = link_to "Trip invites: #{@trip.invites.count} invitations", new_trip_invite_path(@trip)
+      = link_to "Participants: #{@trip.participants.count}", new_trip_participant_path(@trip)
   .row
     .small-8.columns
       %h3.uppercase Places:

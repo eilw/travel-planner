@@ -3,12 +3,3 @@
 %p= @message
 
 %p= @trip.description
-
-%h2 Do you want to join?
-
-%table
-  %tr
-    %td
-      = link_to 'Yes', rvsp_invite_url(@invite, rvsp: true, token: @invite.token)
-    %td
-      = link_to 'No', rvsp_invite_url(@invite, rvsp: false, token: @invite.token)

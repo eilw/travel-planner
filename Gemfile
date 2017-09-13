@@ -37,6 +37,7 @@ gem 'jbuilder', '~> 2.5'
 # gem 'capistrano-rails', group: :development
 gem 'active_type'
 gem 'devise'
+gem 'devise_invitable'
 gem 'haml'
 gem 'haml-rails'
 gem 'simple_form'

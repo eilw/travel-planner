@@ -1,14 +1,13 @@
 class Trip::InviteManager
   class << self
     def add_trips_to(user)
-      accepted_invites_for(user.email).each do |invite|
-        add_participant_to_trip(user: user, trip: invite.trip)
+      pending_trips_for(user.email).each do |pending_trip|
+        add_participant_to_trip(user: user, trip: pending_trip.trip)
       end
     end
 
-    def invite_accepted(invite:, email:)
-      user = user_by(email)
-      add_participant_to_trip(user: user, trip: invite.trip) if user
+    def add_participant(invite:, email:)
+      add_participant_to_trip(user: participant(email), trip: invite.trip)
     end
 
     def remove_participant(trip:, email:)
@@ -18,6 +17,10 @@ class Trip::InviteManager
 
     private
 
+    def participant(email)
+      User.find_by(email: email) || User.invite!(email: email)
+    end
+
     def user_by(email)
       User.find_by(email: email)
     end
@@ -26,8 +29,8 @@ class Trip::InviteManager
       user.trips << trip unless user.trips.include?(trip)
     end
 
-    def accepted_invites_for(email)
-      Trip::Invite.where(email: email, rvsp: true)
+    def pending_trips_for(email)
+      Trip::Invite.where(email: email)
     end
   end
 end

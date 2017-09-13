@@ -44,40 +44,27 @@ describe Trip::Invite do
   end
 
   describe 'after create' do
-    it 'calls the Tripmailer with self and the trip' do
+    it 'calls the Trip mailer with self and the trip' do
       trip = create(:trip)
 
       expect(TripMailer).to receive(:send_new_invitation).with(an_instance_of(trip_invite), trip).and_call_original
       create(:trip_invite, trip: trip)
     end
 
-    it 'sends an email' do
-      expect { create(:trip_invite) }.to change { ActionMailer::Base.deliveries.count }.by(1)
-    end
-  end
-
-  describe 'rvsp' do
-    it 'if rvsp set to true, makes call to TripInviteManager to add user' do
-      expect(invite_manager).to receive(:invite_accepted)
-      invite.update!(rvsp: true)
+    it 'sends a welcome email and invitable email' do
+      expect { create(:trip_invite) }.to change { ActionMailer::Base.deliveries.count }.by(2)
     end
 
-    it 'if rvsp is set to false, does not make call TripInviteManager' do
-      expect(invite_manager).to receive(:invite_accepted).never
-      invite.update!(rvsp: false)
-    end
-  end
-
-  describe '#responded?' do
-    let(:invite) { create(:trip_invite) }
-
-    it 'returns true if rvsp has been responded' do
-      invite.update!(rvsp: true)
-      expect(invite).to be_responded
+    it 'adds the user as a participant' do
+      expect(invite_manager).to receive(:add_participant)
+      create(:trip_invite)
     end
 
-    it 'returns false if rvsp not given' do
-      expect(invite).not_to be_responded
+    context 'when user doesnt not already exist' do
+      it 'creates a new user' do
+        trip = create(:trip)
+        expect { create(:trip_invite, trip: trip) }.to change { User.count }.by(1)
+      end
     end
   end
 
@@ -92,15 +79,6 @@ describe Trip::Invite do
     it 'calls TripInviteManager with remove participant' do
       expect(invite_manager).to receive(:remove_participant).with(trip: invite.trip, email: invite.email)
       invite.destroy!
-    end
-
-    context 'when rvsp not accepted' do
-      it 'does not call the invite manager' do
-        invite.update(rvsp: false)
-
-        expect(invite_manager).not_to receive(:remove_participant)
-        invite.destroy!
-      end
     end
   end
 end

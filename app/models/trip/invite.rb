@@ -5,15 +5,15 @@ class Trip::Invite < ApplicationRecord
 
   validates :email, uniqueness: {
     scope: :trip_id,
-    message: "has already been added as an invite"
+    message: "has already been added to the trip"
   }
   validates :email, presence: true
   validates :email, format: /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\Z/i, on: :create
 
   after_update :update_responded_at, if: :rvsp_changed?
-  after_update :invite_accepted, if: :rvsp_changed?
   after_create :send_invite
-  before_destroy :remove_participant, if: :rvsp?
+  after_create :add_participant
+  before_destroy :remove_participant
 
   def responded?
     responded_at.present?
@@ -21,8 +21,8 @@ class Trip::Invite < ApplicationRecord
 
   private
 
-  def invite_accepted
-    invite_manager.invite_accepted(invite: self, email: email) if rvsp
+  def add_participant
+    invite_manager.add_participant(invite: self, email: email)
   end
 
   def remove_participant

@@ -1,5 +1,5 @@
 class Trips::InvitesController < ApplicationController
-  before_action :authenticate_user!, except: :rvsp
+  before_action :authenticate_user!
   load_and_authorize_resource class: "Trip::Invite", only: [:update, :destroy]
 
   def new
@@ -25,17 +25,7 @@ class Trips::InvitesController < ApplicationController
     trip = @invite.trip
     @invite.destroy
 
-    redirect_to new_trip_invite_path(trip)
-  end
-
-  def rvsp
-    invite = invite_scope.find_by(token: params[:token])
-    if invite.update!(rvsp: params[:rvsp]) && invite.rvsp
-      flash[:notice] = 'Thanks for your response'
-      redirect_to(trip_path(invite.trip))
-    else
-      redirect_to root_path
-    end
+    redirect_to new_trip_participant_path(trip)
   end
 
   private
