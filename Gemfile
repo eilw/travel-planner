@@ -43,6 +43,7 @@ gem 'haml-rails'
 gem 'simple_form'
 gem 'foundation-rails'
 gem 'cancancan'
+gem "react_on_rails", "~> 6"
 
 group :test do
   gem 'selenium-webdriver'
