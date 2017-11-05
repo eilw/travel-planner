@@ -43,7 +43,8 @@ gem 'haml-rails'
 gem 'simple_form'
 gem 'foundation-rails'
 gem 'cancancan'
-gem "react_on_rails", "~> 6"
+gem "react_on_rails", "10.0.0"
+gem "webpacker", "~> 3.0"
 
 group :test do
   gem 'selenium-webdriver'
