@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170422211638) do
+ActiveRecord::Schema.define(version: 20170429212418) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -46,19 +46,6 @@ ActiveRecord::Schema.define(version: 20170422211638) do
     t.integer  "creator_id"
     t.index ["creator_id"], name: "index_trip_destinations_on_creator_id", using: :btree
     t.index ["trip_id"], name: "index_trip_destinations_on_trip_id", using: :btree
-  end
-
-  create_table "trip_invites", force: :cascade do |t|
-    t.string   "email",        default: "", null: false
-    t.integer  "trip_id"
-    t.datetime "created_at",                null: false
-    t.datetime "updated_at",                null: false
-    t.text     "message"
-    t.boolean  "rvsp"
-    t.datetime "responded_at"
-    t.string   "token"
-    t.index ["token"], name: "index_trip_invites_on_token", unique: true, using: :btree
-    t.index ["trip_id"], name: "index_trip_invites_on_trip_id", using: :btree
   end
 
   create_table "trip_participants", force: :cascade do |t|
@@ -105,7 +92,6 @@ ActiveRecord::Schema.define(version: 20170422211638) do
     t.index ["invitation_token"], name: "index_users_on_invitation_token", unique: true, using: :btree
     t.index ["invitations_count"], name: "index_users_on_invitations_count", using: :btree
     t.index ["invited_by_id"], name: "index_users_on_invited_by_id", using: :btree
-    t.index ["invited_by_type", "invited_by_id"], name: "index_users_on_invited_by_type_and_invited_by_id", using: :btree
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
   end
 

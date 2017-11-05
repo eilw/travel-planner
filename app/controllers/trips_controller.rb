@@ -3,7 +3,7 @@ class TripsController < ApplicationController
   load_and_authorize_resource
 
   def index
-    load_invites
+   #load_invites
     load_trips
   end
 
